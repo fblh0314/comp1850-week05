@@ -29,3 +29,37 @@ Your output files must be structured exactly as described - output files for all
 Note:
 Your code will only be tested on valid files in the format shown in the 4 example files in this folder - you do not need to validate any data.
 '''
+import csv
+
+def classificationGet(avg: float) -> str:
+    if avg >= 70:
+        return "1"
+    elif avg >= 60:
+        return "2:1"
+    elif avg >= 50:
+        return "2:2"
+    elif avg >= 40:
+        return "3"
+    else:
+        return "F"
+
+def main():
+    filename = input("Enter filename: ").strip()
+    out_filename = filename + "_out.csv"
+
+    with open(filename, "r", newline="") as f_in, open(out_filename, "w", newline="") as f_out:
+        reader = csv.reader(f_in)
+        writer = csv.writer(f_out)
+
+        next(reader)
+        for row in reader:
+            student_id = row[0]
+            grades = [float(x) for x in row[1:] if x != ""]
+
+            avg = sum(grades) / len(grades)
+            classification = classificationGet(avg)
+
+            writer.writerow([student_id, f"{avg:.2f}", classification])
+
+if __name__ == "__main__":
+    main()
